@@ -33,7 +33,7 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
-            max-width: 90%; /* Mobilde taşmayı önler */
+            max-width: 90%;
         }
         #start-btn:hover {
             background-color: #ff0040;
@@ -50,7 +50,7 @@
             z-index: 10;
             padding: 30px;
             max-width: 600px;
-            width: 85%; /* Mobilde kenarlardan boşluk bırakır */
+            width: 85%;
             background: rgba(0, 0, 0, 0.4);
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(255, 51, 102, 0.2);
@@ -66,8 +66,6 @@
             line-height: 1.6;
             color: #ffd9e2;
         }
-        
-        /* Gül yaprağı stili */
         .petal {
             position: absolute;
             background-color: #ff1a40;
@@ -76,15 +74,11 @@
             box-shadow: 0 0 10px rgba(255,0,0,0.5);
             animation: fall linear infinite;
         }
-        
-        /* Yaprakların düşüş animasyonu */
         @keyframes fall {
             to {
                 transform: translateY(105vh) rotate(720deg);
             }
         }
-
-        /* Telefonlar için özel boyutlandırma (Mobil Uyumluluk) */
         @media (max-width: 768px) {
             #start-btn {
                 padding: 12px 25px;
@@ -119,7 +113,8 @@
         <p>İyi ki varsın, iyi ki benimlesin Nefesim 🫶</p>
     </div>
 
-    <audio id="bg-music" loop>
+    <!-- Mobilde daha rahat çalışması için preload="auto" eklendi -->
+    <audio id="bg-music" loop preload="auto">
         <source src="sarki.mp3" type="audio/mpeg">
     </audio>
 
@@ -129,19 +124,29 @@
         const bgMusic = document.getElementById('bg-music');
 
         startBtn.addEventListener('click', () => {
+            // Telefonu zorla yüklemeye ve oynatmaya sevk ediyoruz
+            bgMusic.load();
+            let playPromise = bgMusic.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    // Müzik başarılı şekilde başladı
+                })
+                .catch(error => {
+                    console.log("Mobil tarayıcı müziği engelledi:", error);
+                });
+            }
+
             startBtn.style.display = 'none';
             messageContainer.style.display = 'block';
-            bgMusic.play();
             createPetals();
         });
 
         function createPetals() {
             const colors = ['#ff3366', '#ff0040', '#cc0033'];
-            
             setInterval(() => {
                 const petal = document.createElement('div');
                 petal.classList.add('petal');
-
                 const size = Math.random() * 15 + 10; 
                 petal.style.width = `${size}px`;
                 petal.style.height = `${size}px`;
@@ -149,9 +154,7 @@
                 petal.style.top = `-30px`;
                 petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 petal.style.animationDuration = `${Math.random() * 3 + 5}s`; 
-
                 document.body.appendChild(petal);
-
                 setTimeout(() => {
                     petal.remove();
                 }, 8000);
