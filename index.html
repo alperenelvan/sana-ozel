@@ -45,27 +45,42 @@
             font-weight: normal;
             margin-top: 3px;
         }
+        
+        /* Mesaj Kutusu Tasarımı */
         #message-container {
             display: none;
             z-index: 10;
-            padding: 30px;
-            max-width: 600px;
-            width: 85%;
-            background: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.45);
             border-radius: 20px;
-            box-shadow: 0 0 30px rgba(255, 51, 102, 0.2);
+            box-shadow: 0 10px 40px rgba(255, 51, 102, 0.2);
             box-sizing: border-box;
+            backdrop-filter: blur(8px); /* Şık buzlu cam efekti */
+            animation: fadeIn 1.2s ease-out; /* Ekrana yumuşak giriş animasyonu */
         }
+
+        /* Ekrana giriş animasyonu */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.2rem;
             color: #ff99aa;
+            margin-top: 0;
             margin-bottom: 20px;
         }
         p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             line-height: 1.6;
             color: #ffd9e2;
+            margin: 10px 0;
         }
+        
+        /* Gül yaprağı stili */
         .petal {
             position: absolute;
             background-color: #ff1a40;
@@ -73,12 +88,16 @@
             opacity: 0.8;
             box-shadow: 0 0 10px rgba(255,0,0,0.5);
             animation: fall linear infinite;
+            z-index: 1;
         }
+        
         @keyframes fall {
             to {
                 transform: translateY(105vh) rotate(720deg);
             }
         }
+
+        /* TELEFON İÇİN ZARİF GÖRÜNÜM (MOBİL DÜZELTMELERİ) */
         @media (max-width: 768px) {
             #start-btn {
                 padding: 12px 25px;
@@ -88,14 +107,16 @@
                 font-size: 13px;
             }
             #message-container {
-                padding: 20px;
+                padding: 35px 25px;
+                width: 85%; /* Kenarlardan boşluk bırakır, ekrana yapışmaz */
             }
             h1 {
-                font-size: 2rem;
+                font-size: 1.5rem; /* Devasa başlığı çok daha zarif bir boyuta küçülttük */
                 margin-bottom: 15px;
             }
             p {
-                font-size: 1.1rem;
+                font-size: 0.95rem; /* Metni kibar ve okunaklı hale getirdik */
+                line-height: 1.6;
             }
         }
     </style>
@@ -113,7 +134,7 @@
         <p>İyi ki varsın, iyi ki benimlesin Nefesim 🫶</p>
     </div>
 
-    <!-- Mobilde daha rahat çalışması için preload="auto" eklendi -->
+    <!-- Mobilde müziğin çalışması için gerekli altyapı -->
     <audio id="bg-music" loop preload="auto">
         <source src="sarki.mp3" type="audio/mpeg">
     </audio>
@@ -124,19 +145,17 @@
         const bgMusic = document.getElementById('bg-music');
 
         startBtn.addEventListener('click', () => {
-            // Telefonu zorla yüklemeye ve oynatmaya sevk ediyoruz
+            // Sesi başlatma
             bgMusic.load();
             let playPromise = bgMusic.play();
 
             if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                    // Müzik başarılı şekilde başladı
-                })
-                .catch(error => {
-                    console.log("Mobil tarayıcı müziği engelledi:", error);
+                playPromise.then(_ => {}).catch(error => {
+                    console.log("Tarayıcı sesi engelledi:", error);
                 });
             }
 
+            // Arayüz geçişi
             startBtn.style.display = 'none';
             messageContainer.style.display = 'block';
             createPetals();
