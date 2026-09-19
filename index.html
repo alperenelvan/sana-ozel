@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="tr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +18,6 @@
             height: 100vh;
             text-align: center;
         }
-
         #start-btn {
             padding: 15px 40px;
             font-size: 20px;
@@ -35,78 +33,92 @@
             flex-direction: column;
             align-items: center;
             gap: 5px;
+            max-width: 90%; /* Mobilde taşmayı önler */
         }
-
         #start-btn:hover {
             background-color: #ff0040;
             transform: scale(1.05);
         }
-
         .small-text {
             font-size: 15px;
             opacity: 0.9;
             font-weight: normal;
             margin-top: 3px;
         }
-
         #message-container {
             display: none;
             z-index: 10;
             padding: 30px;
             max-width: 600px;
+            width: 85%; /* Mobilde kenarlardan boşluk bırakır */
             background: rgba(0, 0, 0, 0.4);
             border-radius: 20px;
             box-shadow: 0 0 30px rgba(255, 51, 102, 0.2);
+            box-sizing: border-box;
         }
-
         h1 {
             font-size: 2.8rem;
             color: #ff99aa;
             margin-bottom: 20px;
         }
-
         p {
             font-size: 1.3rem;
             line-height: 1.6;
             color: #ffd9e2;
         }
-
+        
         /* Gül yaprağı stili */
         .petal {
             position: absolute;
             background-color: #ff1a40;
             border-radius: 150% 0 150% 0;
-            /* Gül yaprağı formu */
             opacity: 0.8;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
             animation: fall linear infinite;
         }
-
+        
         /* Yaprakların düşüş animasyonu */
         @keyframes fall {
             to {
                 transform: translateY(105vh) rotate(720deg);
             }
         }
+
+        /* Telefonlar için özel boyutlandırma (Mobil Uyumluluk) */
+        @media (max-width: 768px) {
+            #start-btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            .small-text {
+                font-size: 13px;
+            }
+            #message-container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+            p {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
-
 <body>
 
-    <!-- İlk açılış ekranı butonu -->
     <button id="start-btn">
-        Sana bir mesajım var Birtanem 🤍
+        Sana bir mesajım var 🤍
         <span class="small-text">Benim için sesini biraz açar mısın?</span>
     </button>
 
-    <!-- Butona tıklandıktan sonra açılacak mesaj -->
     <div id="message-container">
         <h1>Seni Çok Seviyorum...</h1>
         <p>Hayatıma kattığın her güzellik, yüzümdeki her tebessüm senin eserin.</p>
         <p>İyi ki varsın, iyi ki benimlesin Nefesim 🫶</p>
     </div>
 
-    <!-- Arka plan müziği ('sarki.mp3' dosyası html ile aynı klasörde olmalı) -->
     <audio id="bg-music" loop>
         <source src="sarki.mp3" type="audio/mpeg">
     </audio>
@@ -116,40 +128,35 @@
         const messageContainer = document.getElementById('message-container');
         const bgMusic = document.getElementById('bg-music');
 
-        // Butona tıklandığında çalışacak kodlar
         startBtn.addEventListener('click', () => {
-            startBtn.style.display = 'none'; // Butonu gizle
-            messageContainer.style.display = 'block'; // Mesajı göster
-            bgMusic.play(); // Şarkıyı başlat
-            createPetals(); // Gül yapraklarını yağdır
+            startBtn.style.display = 'none';
+            messageContainer.style.display = 'block';
+            bgMusic.play();
+            createPetals();
         });
 
-        // Gül yapraklarını oluşturan fonksiyon
         function createPetals() {
             const colors = ['#ff3366', '#ff0040', '#cc0033'];
-
+            
             setInterval(() => {
                 const petal = document.createElement('div');
                 petal.classList.add('petal');
 
-                // Yapraklara rastgele boyut, renk, konum ve hız atama
-                const size = Math.random() * 15 + 10;
+                const size = Math.random() * 15 + 10; 
                 petal.style.width = `${size}px`;
                 petal.style.height = `${size}px`;
                 petal.style.left = `${Math.random() * 100}vw`;
                 petal.style.top = `-30px`;
                 petal.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                petal.style.animationDuration = `${Math.random() * 3 + 5}s`;
+                petal.style.animationDuration = `${Math.random() * 3 + 5}s`; 
 
                 document.body.appendChild(petal);
 
-                // Ekranı dondurmamak için düşen yaprağı sil
                 setTimeout(() => {
                     petal.remove();
                 }, 8000);
-            }, 250); // Her 250 milisaniyede bir yeni yaprak düşer
+            }, 250); 
         }
     </script>
 </body>
-
 </html>
